@@ -1,4 +1,4 @@
-// evenwins2.cpp
+// evenwins5.cpp
 
 #include <iostream>
 #include <string>
@@ -8,9 +8,26 @@
 using namespace std;
 
 // global variables
-int marbles_in_middle = -1;
-int human_marbles     = -1;
-int computer_marbles  = -1;
+
+
+struct Gamestate {
+    int marbles_in_middle;
+    int human_marbles;
+    int computer_marbles;
+    int totalGames;
+    int humanWins;
+    int computerWins;
+
+    Gamestate()
+    {
+        marbles_in_middle = -1;
+        human_marbles = -1;
+        computer_marbles = -1;
+        totalGames = 0;
+        humanWins = 0;
+        computerWins = 0;
+    }
+};
 
 enum class Player {
     human,
@@ -18,7 +35,6 @@ enum class Player {
 };
 
 Player whose_turn;
-
 
 void welcome_screen() {
     cout << "+-----------------------+\n"
@@ -66,12 +82,12 @@ void next_player() {
     } 
 }
 
-void print_board() {
+void print_board(Gamestate & game) {
     cout << "\n";
-    cout << " marbles in the middle: " << marbles_in_middle 
-         << " " << string(marbles_in_middle, '*') << "\n";
-    cout << "    # marbles you have: " << human_marbles << "\n";
-    cout << "# marbles computer has: " << computer_marbles << "\n";
+    cout << " marbles in the middle: " << game.marbles_in_middle
+         << " " << string(game.marbles_in_middle, '*') << "\n";
+    cout << "    # marbles you have: " << game.human_marbles << "\n";
+    cout << "# marbles computer has: " << game.computer_marbles << "\n";
     cout <<  "\n";
 }
 
@@ -86,9 +102,9 @@ bool is_int(const string& s) {
     }
 }
 
-void human_turn() {
+void human_turn(Gamestate & game) {
     // get number in range 1 to min(4, marbles_in_middle)
-    int max_choice = min(4, marbles_in_middle);
+    int max_choice = min(4, game.marbles_in_middle);
     cout << "It's your turn!\n";
     for(;;) {
         cout << "Marbles to take? (1 - " << max_choice << ") --> ";
@@ -113,55 +129,99 @@ void human_turn() {
         }
 
         cout << "\nOkay, taking " << marbles_str(n) << " ...\n";
-        marbles_in_middle -= n;
-        human_marbles += n;
+        game.marbles_in_middle -= n;
+        game.human_marbles += n;
 
         return;
     } // for
 } // human_turn
 
-void computer_turn() {
+void computer_turn(Gamestate & game) {
     cout << "It's the computer's turn ...\n";
-    int max_choice = min(4, marbles_in_middle);
+    int max_choice = min(4, game.marbles_in_middle);
 
     // choose at random
     int n = 1 + rand() % max_choice;
     cout << "Computer takes " << marbles_str(n) << " ...\n";
-    marbles_in_middle -= n;
-    computer_marbles += n;
+    game.marbles_in_middle -= n;
+    game.computer_marbles += n;
 }
 
-void game_over() {
+string randTaunt(){
+    string taunt1 = "The computer wins: tremble before it's mighty brain!";
+    string taunt2 = "OWNAGE!";
+    string taunt3 = "Better luck next time!";
+    string taunt4 = "CPU > Brain";
+    string taunt5 = "Wombo Combo! Get rekt!";
+    
+    int randomTaunt = 0;
+    randomTaunt = rand() % 5 + 1;
+
+    switch (randomTaunt)
+    {
+        case 1:
+        {
+            return taunt1;
+            break;
+        }
+        case 2:
+        {
+            return taunt2;
+            break;
+        }
+        case 3:
+        {
+            return taunt3;
+            break;
+        }
+        case 4:
+        {
+            return taunt4;
+            break;
+        }
+        case 5:
+        {
+            return taunt5;
+            break;
+        }
+    }
+    return "Error in randomTaunt()";
+}
+
+void game_over(Gamestate & game) {
     cout << "\n";
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
          << "!! All the marbles are taken: Game Over !!\n"
          << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
-    print_board();
-    if (human_marbles % 2 == 0) {
+    print_board(game);
+    if (game.human_marbles % 2 == 0) {
+        ++game.humanWins;
         cout << "You are the winner! Congratulations!\n";
     } else {
-        cout << "The computer wins: tremble before it's mighty brain!\n";
+        cout << randTaunt() << '\n';
+        ++game.computerWins;
     }
 }
 
-void play_game() {
+void play_game(Gamestate & game) {
     // initialize the game state
-    marbles_in_middle = 27;
-    human_marbles = 0;
-    computer_marbles = 0;
-    print_board();
+    game.marbles_in_middle = 27;
+    game.human_marbles = 0;
+    game.computer_marbles = 0;
+    print_board(game);
 
     for (;;) {
-        if (marbles_in_middle == 0) {
-            game_over();
+        if (game.marbles_in_middle == 0) {
+            ++game.totalGames;
+            game_over(game);
             return;
         } else if (whose_turn == Player::human) {
-            human_turn();
-            print_board();
+            human_turn(game);
+            print_board(game);
             next_player();
         } else if (whose_turn == Player::computer) {
-            computer_turn();
-            print_board();
+            computer_turn(game);
+            print_board(game);
             next_player();
         }
     } // for
@@ -172,12 +232,20 @@ int main() {
 
     welcome_screen();
 
+    Gamestate game;
+
     for(;;) {
         choose_first_player();
-        play_game();
+        play_game(game);
+
+        cout << "\nStatistics"
+             << "\n----------"
+             << "\ntotal games: " << game.totalGames
+             << "\nhuman wins: " << game.humanWins
+             << "\ncomputer wins: " << game.computerWins;
 
         // ask if the user if they want to play again
-        cout << "\nWould you like to play again? (y/n) --> ";
+        cout << "\n\nWould you like to play again? (y/n) --> ";
         string again;
         cin >> again;
         if (again == "y") {

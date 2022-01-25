@@ -1,4 +1,4 @@
-// evenwins2.cpp
+// evenwins4.cpp
 
 #include <iostream>
 #include <string>
@@ -12,13 +12,16 @@ int marbles_in_middle = -1;
 int human_marbles     = -1;
 int computer_marbles  = -1;
 
+int totalGames = 0;
+int humanWins = 0;
+int computerWins = 0;
+
 enum class Player {
     human,
     computer
 };
 
 Player whose_turn;
-
 
 void welcome_screen() {
     cout << "+-----------------------+\n"
@@ -131,6 +134,47 @@ void computer_turn() {
     computer_marbles += n;
 }
 
+string randTaunt(){
+    string taunt1 = "The computer wins: tremble before it's mighty brain!";
+    string taunt2 = "OWNAGE!";
+    string taunt3 = "Better luck next time!";
+    string taunt4 = "CPU > Brain";
+    string taunt5 = "Wombo Combo! Get rekt!";
+    
+    int randomTaunt = 0;
+    randomTaunt = rand() % 5 + 1;
+
+    switch (randomTaunt)
+    {
+        case 1:
+        {
+            return taunt1;
+            break;
+        }
+        case 2:
+        {
+            return taunt2;
+            break;
+        }
+        case 3:
+        {
+            return taunt3;
+            break;
+        }
+        case 4:
+        {
+            return taunt4;
+            break;
+        }
+        case 5:
+        {
+            return taunt5;
+            break;
+        }
+    }
+    return "Error in randomTaunt()";
+}
+
 void game_over() {
     cout << "\n";
     cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n"
@@ -138,9 +182,11 @@ void game_over() {
          << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
     print_board();
     if (human_marbles % 2 == 0) {
+        ++humanWins;
         cout << "You are the winner! Congratulations!\n";
     } else {
-        cout << "The computer wins: tremble before it's mighty brain!\n";
+        cout << randTaunt() << '\n';
+        ++computerWins;
     }
 }
 
@@ -153,6 +199,7 @@ void play_game() {
 
     for (;;) {
         if (marbles_in_middle == 0) {
+            ++totalGames;
             game_over();
             return;
         } else if (whose_turn == Player::human) {
@@ -176,8 +223,14 @@ int main() {
         choose_first_player();
         play_game();
 
+        cout << "\nStatistics"
+             << "\n----------"
+             << "\ntotal games: " << totalGames
+             << "\nhuman wins: " << humanWins
+             << "\ncomputer wins: " << computerWins;
+
         // ask if the user if they want to play again
-        cout << "\nWould you like to play again? (y/n) --> ";
+        cout << "\n\nWould you like to play again? (y/n) --> ";
         string again;
         cin >> again;
         if (again == "y") {

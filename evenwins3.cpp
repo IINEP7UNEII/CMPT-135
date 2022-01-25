@@ -1,4 +1,4 @@
-// evenwins.cpp
+// evenwins3.cpp
 
 #include <iostream>
 #include <string>
@@ -16,13 +16,13 @@ int totalGames = 0;
 int humanWins = 0;
 int computerWins = 0;
 
-enum class Player 
-{
+enum class Player {
     human,
     computer
 };
 
 Player whose_turn;
+
 
 void welcome_screen() {
     cout << "+-----------------------+\n"
@@ -142,12 +142,10 @@ void game_over() {
          << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n";
     print_board();
     if (human_marbles % 2 == 0) {
-        cout << "You are the winner! Congratulations!\n";
-        ++totalGames;
         ++humanWins;
+        cout << "You are the winner! Congratulations!\n";
     } else {
         cout << "The computer wins: tremble before it's mighty brain!\n";
-        ++totalGames;
         ++computerWins;
     }
 }
@@ -161,13 +159,14 @@ void play_game() {
 
     for (;;) {
         if (marbles_in_middle == 0) {
+            ++totalGames;
             game_over();
             return;
         } else if (whose_turn == Player::human) {
             human_turn();
             print_board();
             next_player();
-        } else if (whose_turn == Player::human) {
+        } else if (whose_turn == Player::computer) {
             computer_turn();
             print_board();
             next_player();
@@ -184,14 +183,14 @@ int main() {
         choose_first_player();
         play_game();
 
-        cout << "Statistics\n"
-        << "----------\n"
-        << "Total games: " << totalGames << '\n'
-        << "Human wins: " << humanWins << '\n'
-        << "computer wins: " << computerWins << endl;
+        cout << "\nStatistics"
+             << "\n----------"
+             << "\ntotal games: " << totalGames
+             << "\nhuman wins: " << humanWins
+             << "\ncomputer wins: " << computerWins;
 
         // ask if the user if they want to play again
-        cout << "\nWould you like to play again? (y/n) --> ";
+        cout << "\n\nWould you like to play again? (y/n) --> ";
         string again;
         cin >> again;
         if (again == "y") {
