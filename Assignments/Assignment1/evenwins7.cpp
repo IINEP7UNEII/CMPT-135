@@ -1,14 +1,15 @@
 // evenwins7.cpp
 
+//Program made by: Daniel Tolsky
+//SFU ID: 301452597
+//I hereby confirm that this is my own work and I have not violated any of SFU’s Code of Academic Integrity and Good Conduct (S10.01).
+
 #include <iostream>
 #include <string>
 #include <ctime>
 #include <cstdlib>
 
 using namespace std;
-
-// global variables
-
 
 struct Gamestate {
     int marbles_in_middle;
@@ -132,16 +133,18 @@ void human_turn(Gamestate & game) {
     } // for
 } // human_turn
 
-//Computer will take an even number of marbles (2 or 4) if the marbles left in the middle is odd
-//if there are an even number of marbles in the middle, then the computer will take an odd number
-//The strategy is not perfect because the player could still dictate the number of marbles they collect (odd or even)
+//Computer will take an even number of marbles if the marbles left in the middle is odd and computer has an odd number of marbles
+//or if both the computer marbles and marbles in the middle are even.
+//If there are an even number of marbles in the middle and if the computer has an odd number of marbles, then the computer will take an odd number
+//or if the marbles in the middle and the computer has an odd number of marbles.
+//The strategy is not perfect because the player could still dictate the number of marbles they collect and trick the computer by knowing its logic or strategy (odd or even)
 void computer_turn(Gamestate & game) {
     cout << "It's the computer's turn ...\n";
     int max_choice = min(4, game.marbles_in_middle);
 
     int n = 0;
 
-    if (game.marbles_in_middle % 2 == 0) //if even number of marbles in the middle
+    if (game.marbles_in_middle % 2 == 0 && game.computer_marbles % 2 == 1) //if even number of marbles in the middle and if computer has odd number of marbles
     {
         if (max_choice >= 3)
         {
@@ -152,15 +155,45 @@ void computer_turn(Gamestate & game) {
             n = 1;
         }
     }
-    else //if odd number of marbles in the middle
+    else if (game.marbles_in_middle % 2 == 0 && game.computer_marbles % 2 == 0) //if even number of marbles in the middle and if computer has an even number of marbles
     {
         if (max_choice == 4)
         {
             n = 4;
         }
-        else
+        else if (game.marbles_in_middle == 3 || game.marbles_in_middle == 2) //to make sure the cpu doesnt take more marbles then there are in the middle
         {
             n = 2;
+        }
+        else
+        {
+            n = 1;
+        }
+    }
+    else if (game.marbles_in_middle % 2 == 1 && game.computer_marbles % 2 == 1) //if odd number of marbles in the middle and if computer has an odd number of marbles
+    {
+        if (max_choice >= 3)
+        {
+            n = 3;
+        }
+        else
+        {
+            n = 1;
+        }
+    }
+    else //everything else (if marble in middle is odd and if computer has an even number of marbles)
+    {
+        if (max_choice == 4)
+        {
+            n = 4;
+        }
+        else if (game.marbles_in_middle == 3) //to make sure the cpu doesnt take more marbles then there are in the middle
+        {
+            n = 2;
+        }
+        else
+        {
+            n = 1;
         }
     }
 
@@ -170,6 +203,7 @@ void computer_turn(Gamestate & game) {
 }
 
 string randTaunt(){
+    //returns one of five random taunts as a string
     string taunt1 = "The computer wins: tremble before it's mighty brain!";
     string taunt2 = "OWNAGE!";
     string taunt3 = "Better luck next time!";
@@ -251,9 +285,7 @@ void play_game(Gamestate & game) {
 
 int main() {
     srand(time(NULL));
-
     welcome_screen();
-
     Gamestate game;
 
     for(;;) {
