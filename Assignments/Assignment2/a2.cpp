@@ -340,7 +340,6 @@ bool operator==(const str_vec a, const str_vec b)
 			return false;
 		}
 	}
-
 	return true;
 }
 
