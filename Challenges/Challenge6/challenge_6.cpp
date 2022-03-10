@@ -47,7 +47,7 @@ int main()
 	vector <string> list;
 
 	ifstream file;
-    file.open("C:\\Users\\Daniel\\Documents\\Coding Projects\\C++ Code\\words6.txt", ios::in);
+    file.open("C:\\Users\\Daniel\\Documents\\Code\\C++\\CMPT-135\\Challenges\\Challenge6\\words6.txt", ios::in);
 
 	while (file >> str)
     {
