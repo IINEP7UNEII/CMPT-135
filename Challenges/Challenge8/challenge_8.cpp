@@ -17,8 +17,6 @@
 using namespace std;
 
 bool isMultipleOfEight(int);
-void getNum(string, int&, int&);
-void getOp(string, int&, char&);
 
 void execute(char, int&, int&);
 int add(int, int);
@@ -41,50 +39,60 @@ int main()
         list.push_back(str);
 	}
 
-	int charCount = 0;
 	int a = 0;
 	int b = 0;
 	char op = ' ';
+	int charCount = 0;
+
+	int multipleOfEights = 0;
 
 	for (int lineCount = 0; lineCount < list.size(); ++lineCount) //go over lines
 	{
-		getNum(list[lineCount], charCount, a);
+		if (charCount == 0)
+		{
+			while (list[lineCount][charCount] != ' ' && charCount < list[lineCount].size()) //get first number
+			{
+				a *= 10;
+				a += list[lineCount][charCount] - 48;
+				++charCount;
+			}
+		}
 
+		while (charCount < list[lineCount].size())
+		{
+			while ((list[lineCount][charCount] < 48 || list[lineCount][charCount] > 57) && charCount < list[lineCount].size()) //get operator
+			{
+				if (list[lineCount][charCount] != ' ')
+				{
+					op = list[lineCount][charCount];
+				}
+				++charCount;
+			}
+
+			while (list[lineCount][charCount] != ' ' && charCount < list[lineCount].size()) //get second number
+			{
+				b *= 10;
+				b += list[lineCount][charCount] - 48;
+				++charCount;
+			}
+
+			execute(op, a, b);
+		}
+
+		if (isMultipleOfEight(a))
+		{
+			++multipleOfEights;
+		}
 
 		a = 0;
 		b = 0;
+		op = ' ';
 		charCount = 0;
 	}
 
+	cout << "\nThere are " << multipleOfEights << " expressions that evaluate to a multiple of eight\n\n";
+
 	system("pause");
-}
-
-void getNum(string s, int& i, int& num)
-{
-	if (s[i] > 57 || s[i] < 48 || i > s.size() - 1)
-	{
-		return;
-	}
-
-	num *= 10;
-	num += s[i] - 48;
-	getNum(s, ++i, num);
-}
-
-void getOp(string s, int& i, char& op)
-{
-	if (i > s.size() - 1)
-	{
-		return;
-	}
-
-	if (s[i] == '+' || s[i]  == '-' || s[i]  == '*' || s[i] == '@')
-	{
-		op = s[i];
-		return;
-	}
-
-	getOp(s, ++i, op);
 }
 
 void execute(char c, int& a, int& b)
@@ -133,4 +141,13 @@ int max(int a, int b)
 	}
 
 	return b;
+}
+
+bool isMultipleOfEight(int num)
+{
+	if (num % 8 == 0)
+	{
+		return true;
+	}
+	return false;
 }
