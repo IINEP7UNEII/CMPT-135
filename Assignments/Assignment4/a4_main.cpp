@@ -9,6 +9,7 @@ int main ()
 {
 	cout << "a4_main.cpp called ... \n";
 
+	//tests
 	sum_of_squares_test();
 	count_strange_test();
 	all_sfu_test();
@@ -16,6 +17,9 @@ int main ()
 	strip_test();
 	sum_neg_test();
 	max_vec_test();
+	count_test();
+	zip_test();
+	join_test();
 
 	system("pause");
 }

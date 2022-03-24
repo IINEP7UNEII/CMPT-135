@@ -30,11 +30,16 @@ using namespace std;
 
 int sum_of_squares(int n)
 {
-    if (n == 0)
+    if (n < 0) //pre-condition check
+    {
+        cmpt::error("Error: sum_of_squares(), n must be greater or euqal to zero");
+    }
+
+    if (n == 0) //base case
     {
         return 0;
     }
-    return (n * n) + sum_of_squares(n - 1);
+    return (n * n) + sum_of_squares(n - 1); //recursive step
 }
 
 void sum_of_squares_test()
@@ -49,17 +54,22 @@ void sum_of_squares_test()
 
 int count_strange(int n)
 {
-    if (n == 1)
+    if (n <= 0) //pre-condition check
+    {
+        cmpt::error("Error: count_strange(), n must be greater than zero");
+    }
+
+    if (n == 1) //base case
     {
         return 1;
     }
     else if (n % 2 == 0 || n % 5 == 0)
     {
-        return count_strange(n - 1);
+        return count_strange(n - 1); //recursive case
     }
     else
     {
-        return count_strange(n - 1) + 1;
+        return count_strange(n - 1) + 1; //recursive case
     }
 }
 
@@ -75,14 +85,14 @@ void count_strange_test()
 
 bool all_sfu(const string& s)
 {
-    if (s == "" || s.size() <= 1)
+    if (s == "" || s.size() <= 1) //base case
     {
         return true;
     }
-    else if (s[0] == 's' || s[0] == 'f' || s[0] == 'u')
+    else if (s[0] == 's' || s[0] == 'f' || s[0] == 'u') //recursive case
     {
-        string p(s.begin() + 1, s.end());
-        return all_sfu(p);
+        string newStr(s.begin() + 1, s.end());
+        return all_sfu(newStr);
     }
 
     return false;
@@ -101,18 +111,18 @@ void all_sfu_test()
 
 bool is_int(const string& s)
 {
-    if (s == "" || (s[0] == '-' && s[1] == '-'))
+    if (s == "" || (s[0] == '-' && s[1] == '-')) //base case
     {
         return false;
     }
-    else if (s.size() == 1 && s[0] >= 48 && s[0] <= 57)
+    else if (s.size() == 1 && s[0] >= 48 && s[0] <= 57) //base case
     {
         return true;
     }
-    else if ((s[0] >= 48 && s[0] <= 57) || s[0] == '-')
+    else if ((s[0] >= 48 && s[0] <= 57) || s[0] == '-') //recursive case
     {
-        string p(s.begin() + 1, s.end());
-        return is_int(p);
+        string newStr(s.begin() + 1, s.end());
+        return is_int(newStr);
     }
 
     return false;
@@ -131,21 +141,21 @@ void is_int_test()
 
 string strip(const string& s)
 {
-    if (s[0] == ' ')
+    if (s[0] == ' ') //recursive case
     {
-        string p(s.begin() + 1, s.end());
-        return strip(p);
+        string newStr(s.begin() + 1, s.end());
+        return strip(newStr);
     }
-    else if (s[s.size() - 1] == ' ')
+    else if (s[s.size() - 1] == ' ') //recursive case
     {
-        string p(s.begin(), s.end() - 1);
-        return strip(p);
+        string newStr(s.begin(), s.end() - 1);
+        return strip(newStr);
     }
-    else if (s == "")
+    else if (s == "") //base case
     {
         return "";
     }
-    else
+    else //base case
     {
         return s;
     }
@@ -164,22 +174,22 @@ void strip_test()
 
 int sum_neg(const vector<int>& v)
 {
-    vector <int> p = v;
+    vector <int> copyVec = v;
 
-    if (p.size() == 0)
+    if (copyVec.size() == 0) //base case
     {
         return 0;
     }
-    else if (p[p.size() - 1] < 0)
+    else if (copyVec[copyVec.size() - 1] < 0) //recursive case
     {
-        int temp = p[p.size() - 1];
-        p.pop_back();
-        return temp + sum_neg(p);
+        int temp = copyVec[copyVec.size() - 1];
+        copyVec.pop_back();
+        return temp + sum_neg(copyVec);
     }
-    else
+    else //recursive case
     {
-        p.pop_back();
-        return sum_neg(p);
+        copyVec.pop_back();
+        return sum_neg(copyVec);
     }
 }
 
@@ -200,29 +210,29 @@ void sum_neg_test()
 
 vector<int> max_vec(const vector<int>& a, const vector<int>& b)
 {
-    vector <int> a1 = a;
-    vector <int> b1 = b;
+    vector <int> aCopy = a;
+    vector <int> bCopy = b;
 
-    if (b1.size() == 0)
+    if (bCopy.size() == 0) //base case
     {
-        return a1;
+        return aCopy;
     }
-    else if (a1[b1.size() - 1] >= b1[b1.size() - 1])
+    else if (aCopy[bCopy.size() - 1] >= bCopy[bCopy.size() - 1]) //base case
     {
-        b1.pop_back();
+        bCopy.pop_back();
     }
-    else if (a1[b1.size() - 1] < b1[b1.size() - 1])
+    else if (aCopy[bCopy.size() - 1] < bCopy[bCopy.size() - 1]) //recursive case
     {
-        a1[b1.size() - 1] = b1[b1.size() - 1];
-        b1.pop_back();
+        aCopy[bCopy.size() - 1] = bCopy[bCopy.size() - 1];
+        bCopy.pop_back();
     }
     
-    return max_vec(a1, b1);
+    return max_vec(aCopy, bCopy);
 }
 
 void max_vec_test()
 {
-    cout << "\nTest sum_neg(): ";
+    cout << "\nTest max_vec(): ";
 
     vector <int> a = {4, 2, 7};
     vector <int> b = {-3, 7, 0};
@@ -235,6 +245,92 @@ void max_vec_test()
     assert(max_vec(a, b) == ab);
     assert(max_vec(b, c) == bc);
     assert(max_vec(c, a) == ca);
+
+	cout << "passed";
+}
+
+int count(const vector<string>& v, const string& s)
+{
+    vector <string> copyVec = v;
+ 
+    if (v.size() == 0) //base case
+    {
+        return 0;
+    }
+
+    copyVec.pop_back();
+
+    if (v[v.size() - 1] == s) //recursive case
+    {
+        return count(copyVec, s) + 1;
+    }
+
+    return count(copyVec, s);
+}
+
+void count_test()
+{
+    cout << "\nTest count(): ";
+
+    vector <string> vec1 = {"peter", "bob", "zack"};
+    vector <string> vec2 = {"peter", "peter", "bob"};
+    vector <string> vec3 = {"peter", "peter", "peter"};
+
+    assert(count(vec1, "harold") == 0);
+    assert(count(vec2, "peter") == 2);
+    assert(count(vec3, "peter") == 3);
+
+	cout << "passed";
+}
+
+vector<string> zip(const string& s, const string& t)
+{
+    //incomplete
+    vector <string> empty;
+    string sCopy = s; //to get rid of compilation warning
+    string tCppy = t; //to get rid of compilation warning
+    return empty;
+}
+
+void zip_test()
+{
+    cout << "\nTest zip(): ";
+
+    string a = "peter";
+    string b = "bobob";
+    string c = "seven";
+
+    vector <string> ab = {"pb", "eo", "tb", "eo", "rb"};
+    vector <string> ac = {"ps", "ee", "tv", "ee", "rn"};
+    vector <string> bc = {"bs", "oe", "bv", "oe", "bn"};
+
+    assert(zip(a, b) == ab);
+    assert(zip(a, c) == ac);
+    assert(zip(b, c) == bc);
+
+	cout << "passed";
+}
+
+string join(const vector<string>& v, const string& sep)
+{
+    //incomplete
+    string empty;
+    vector vCopy = v; //to get rid of compilation warning
+    string sepCopy = sep; //to get rid of compilation warning
+    return empty;
+}
+
+void join_test()
+{
+    cout << "\nTest join(): ";
+
+    vector <string> vec1 = {"peter", "banana", "bob"};
+    vector <string> vec2 = {"fly", "walk", "run"};
+    vector <string> vec3 = {"moose", "turtle", "deer"};
+
+    assert(join(vec1, "-") == "peter-banana-bob");
+    assert(join(vec2, ", ") == "fly, walk, run");
+    assert(join(vec3, "") == "mooseturtledeer");
 
 	cout << "passed";
 }
