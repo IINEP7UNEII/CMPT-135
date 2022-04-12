@@ -1,0 +1,100 @@
+P-51D
+Fighter
+USA
+3463
+710
+MIG-15
+Fighter
+USSR
+3681
+1076
+MIG-17
+Figher
+USSR
+3919
+1100
+MIG-21
+Figher
+USSR
+8725
+2175
+F-4E
+Fighter
+USA
+13757
+2370
+F-5E
+Fighter
+USA
+4347
+1741
+F-14D
+Naval Fighter
+USA
+19838
+2485
+F-15C
+Strike Fighter
+USA
+12701
+2655
+F-16C
+Fighter
+USA
+8573
+2121
+F/A-18C
+Multirole Fighter
+USA
+10433
+2205
+F-22A
+Stealth Fighter
+USA
+19700
+2414
+F-35A
+Stealth Multirole Fighter
+USA
+13290
+1960
+MIG-29
+Multirole Fighter
+USSR
+24251
+2400
+SU-27
+Fighter
+USSR
+16380
+2500
+SU-35
+Fighter
+Russia
+19000
+2400
+SU-57
+Stealth Fighter
+Russia
+18000
+2135
+B-52H
+Strategic Bomber
+USA
+83250
+1050
+B-2A
+Stealth Bomber
+USA
+71700
+1010
+TU-95
+Strategic Bomber
+USSR
+90000
+925
+AH-64D
+Attack Helicopter
+USA
+5165
+293
